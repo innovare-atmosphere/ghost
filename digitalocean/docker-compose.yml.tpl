@@ -7,7 +7,7 @@ services:
     volumes:
       - ghost-data:/var/lib/ghost/content
     environment:
-      - url=${url}
+      - url=https://${url}
 
 volumes:
   ghost-data:
