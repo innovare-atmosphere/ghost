@@ -37,7 +37,7 @@ resource "digitalocean_droplet" "www-ghost" {
       "sleep 5s",
       "apt install -y nginx",
       "apt install -y python3-certbot-nginx",
-      # create nextcloud installation directory
+      # create ghost installation directory
       "mkdir /root/ghost",
     ]
   }
@@ -46,11 +46,6 @@ resource "digitalocean_droplet" "www-ghost" {
     content      = templatefile("docker-compose.yml.tpl", {
       url = var.domain != "" ? var.domain : "0.0.0.0"
     })
-    destination = "/root/ghost/docker-compose.yml"
-  }
-
-  provisioner "file" {
-    source      = "docker-compose.yml.tpl"
     destination = "/root/ghost/docker-compose.yml"
   }
 
@@ -65,7 +60,7 @@ resource "digitalocean_droplet" "www-ghost" {
     inline = [
       "export PATH=$PATH:/usr/bin",
       # run compose
-      "cd /root/nextcloud",
+      "cd /root/ghost",
       "docker-compose up -d",
       "rm /etc/nginx/sites-enabled/default",
       "systemctl restart nginx",
