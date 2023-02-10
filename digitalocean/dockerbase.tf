@@ -10,6 +10,12 @@ variable "webmaster_email" {
     default = ""
 }
 
+resource "random_password" "database_password" {
+  length           = 16
+  special          = true
+  override_special = "_%@"
+}
+
 resource "digitalocean_droplet" "www-ghost" {
   #This has pre installed docker
   image = "docker-20-04"
@@ -45,7 +51,8 @@ resource "digitalocean_droplet" "www-ghost" {
 
   provisioner "file" {
     content      = templatefile("docker-compose.yml.tpl", {
-      url = var.domain != "" ? var.domain : "0.0.0.0"
+      url = var.domain != "" ? var.domain : "0.0.0.0",
+      database_password = var.database_password != "" ? var.database_password : random_password.database_password.result
     })
     destination = "/root/ghost/docker-compose.yml"
   }
