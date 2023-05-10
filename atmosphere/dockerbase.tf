@@ -69,7 +69,7 @@ resource "digitalocean_droplet" "www-ghost" {
       "export PATH=$PATH:/usr/bin",
       # run compose
       "cd /root/ghost",
-      "docker-compose up -d",
+      "docker compose up -d",
       "rm /etc/nginx/sites-enabled/default",
       "systemctl restart nginx",
       "ufw allow http",
